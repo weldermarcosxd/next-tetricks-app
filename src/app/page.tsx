@@ -33,7 +33,7 @@ export default function Home() {
           className="bg-red-600 py-2 px-6 rounded-md"
           onClick={() => signOut()}
         >
-          Sign out
+          Sair
         </button>
       </div>
     );
