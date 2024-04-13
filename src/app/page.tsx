@@ -25,8 +25,8 @@ export default function Home() {
           />
         </div>
         <p className="text-2xl mb-2">
-          Welcome <span className="font-bold">{session.user?.name}</span>.
-          Signed In As
+          Bem vindo <span className="font-bold">{session.user?.name}</span>.
+          Logado como
         </p>
         <p className="font-bold mb-4">{session.user?.email}</p>
         <button
