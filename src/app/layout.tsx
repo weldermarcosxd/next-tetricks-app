@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import SessionWrapper from "./components/SessionWrapper";
 import Navbar from "./components/Navbar";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <Navbar />
           {children}
+          <SpeedInsights />
         </body>
       </html>
     </SessionWrapper>
