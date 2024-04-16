@@ -1,9 +1,8 @@
 // imports
-import NextAuth from "next-auth";
-
+import NextAuth, { AuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     KeycloakProvider({
       clientId: process.env.KEYCLOAK_ID as string,
@@ -11,6 +10,9 @@ const handler = NextAuth({
       issuer: process.env.KEYCLOAK_ISSUER,
     }),
   ],
+  pages: {
+    signIn: "/",
+  },
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -25,7 +27,15 @@ const handler = NextAuth({
       session.accessToken = token.accessToken as string;
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/api/auth/signin")) return "/";
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
   },
-});
+} as AuthOptions;
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
