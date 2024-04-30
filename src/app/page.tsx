@@ -9,8 +9,8 @@ export default function Home() {
   if (session) {
     let userAvatar = "avatar.svg";
 
-    if (session.user?.image !== undefined)
-      userAvatar = session.user?.image as string;
+    if (session.user?.profileImage !== undefined)
+      userAvatar = session.user?.profileImage as string;
 
     return (
       <div className="w-full h-screen flex flex-col justify-center items-center">
