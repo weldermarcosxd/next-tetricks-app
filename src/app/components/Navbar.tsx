@@ -13,10 +13,13 @@ import {
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const issuerUrl = process.env.REACT_APP_KEYCLOAK_ISSUER;
+  const pathname = usePathname();
+  console.log(pathname);
 
   return (
     <header className="sticky top-0 z-30 body-font bg-white">
@@ -42,14 +45,30 @@ export default function Navbar() {
           </Link>
           <Link
             aria-disabled={session == null}
-            className={session ? "p-2" : "p-2 pointer-events-none opacity-50"}
+            className={
+              (session ? "p-2" : "p-2 pointer-events-none opacity-50") +
+              (pathname == "/produtos" ? " bg-gray-500/10 rounded" : "")
+            }
             href="/produtos"
           >
             Produtos
           </Link>
           <Link
             aria-disabled={session == null}
-            className={session ? "p-2" : "p-2 pointer-events-none opacity-50"}
+            className={
+              (session ? "p-2" : "p-2 pointer-events-none opacity-50") +
+              (pathname == "/tarefas" ? " bg-gray-500/10 rounded" : "")
+            }
+            href="/tarefas"
+          >
+            Tarefas
+          </Link>
+          <Link
+            aria-disabled={session == null}
+            className={
+              (session ? "p-2" : "p-2 pointer-events-none opacity-50") +
+              (pathname == "/sobre" ? " bg-gray-500/10 rounded" : "")
+            }
             href="/sobre"
           >
             Sobre
