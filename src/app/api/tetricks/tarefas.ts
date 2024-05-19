@@ -1,6 +1,7 @@
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/auth-options";
 import { redirect } from "next/navigation";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export async function obterTarefas() {
   const session = (await getServerSession(authOptions)) as Session;
@@ -19,4 +20,8 @@ export async function obterTarefas() {
   if (!res.ok) throw new Error(`Failed to fetch data ${res.status}`);
 
   return res.json();
+}
+
+export default function api(req: NextApiRequest, res: NextApiResponse) {
+  return obterTarefas();
 }

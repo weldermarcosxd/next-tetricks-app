@@ -1,7 +1,15 @@
 import { Input } from "@/components/ui/input";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default function SobrePage() {
+  const session = getServerSession();
+
+  if (!session) {
+    redirect("/logout");
+  }
+
   return (
     <section className="text-gray-600 body-font">
       <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">

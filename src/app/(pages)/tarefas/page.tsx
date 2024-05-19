@@ -1,7 +1,8 @@
-import { obterTarefas } from "@/api/tetricks/tarefas";
+"use client";
 
 import Image from "next/image";
 import { MoreHorizontal } from "lucide-react";
+import useSWR from "swr";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,9 +29,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
+import fetcher from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
-export default async function TarefasPage() {
-  const produtos = (await obterTarefas()).resultados as any[];
+export default function TarefasPage() {
+  const [pageIndex, setPageIndex] = useState(0);
+
+  const session = useSession() as any;
+  const myHeaders = new Headers([
+    ["Autorization", `Bearer ${session.accessToken}`],
+  ]);
+
+  const configInit: RequestInit = {
+    method: "GET",
+    headers: myHeaders,
+    cache: "default",
+  };
+  const { data, error, isLoading } = useSWR<any>(
+    [process.env.TETRICKS_API_BASE_URL + "/Tarefas", configInit],
+    fetcher
+  );
+
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+
+  const produtos = data.resultados as any[];
 
   return (
     <div className="flex w-full flex-col">

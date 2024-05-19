@@ -19,7 +19,6 @@ export default function Navbar() {
   const { data: session } = useSession();
   const issuerUrl = process.env.REACT_APP_KEYCLOAK_ISSUER;
   const pathname = usePathname();
-  console.log(pathname);
 
   return (
     <header className="sticky top-0 z-30 body-font bg-white">
