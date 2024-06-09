@@ -1,9 +1,9 @@
-import { obterTarefas } from "@/api/tetricks/tarefas";
+import { obterProdutos } from "@/api/tetricks/tarefas";
+import "./style.css";
 
 import Image from "next/image";
 import { MoreHorizontal } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,10 +30,11 @@ import {
 } from "@/components/ui/table";
 
 export default async function ProdutosPage() {
-  const produtos = (await obterTarefas()).resultados as any[];
+  const resultado = await obterProdutos();
+  const produtos = resultado.resultados as any[];
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex w-full flex-col">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Card x-chunk="dashboard-06-chunk-0">
@@ -50,19 +51,19 @@ export default async function ProdutosPage() {
                     <TableHead className="hidden w-[100px] sm:table-cell">
                       <span className="sr-only">Image</span>
                     </TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Sequencial</TableHead>
+                    <TableHead>Nome</TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Price
+                      Valor Unitário
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Total Sales
+                      Criado Em
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Created at
+                      Atualizado Em
                     </TableHead>
                     <TableHead>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">Ações</span>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -70,31 +71,31 @@ export default async function ProdutosPage() {
                   {produtos.map((produto, i) => {
                     return (
                       <TableRow key={produto.id}>
-                        <TableCell className="hidden sm:table-cell">
+                        <TableCell className="celulaDoCorpo hidden sm:table-cell">
                           <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
-                            height="64"
+                            height="30"
                             src="https://dummyimage.com/30x30"
-                            width="64"
+                            width="30"
                           />
                         </TableCell>
-                        <TableCell className="font-medium">
+                        <TableCell className="celulaDoCorpo">
+                          {produto.sequencial}
+                        </TableCell>
+                        <TableCell className="celulaDoCorpo">
                           {produto.descricao}
                         </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Draft</Badge>
+                        <TableCell className="celulaDoCorpo hidden md:table-cell">
+                          {produto.valorUnitario}
                         </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {produto.id}
+                        <TableCell className="celulaDoCorpo hidden md:table-cell">
+                          {produto.criadoEm}
                         </TableCell>
-                        <TableCell className="hidden md:table-cell">
+                        <TableCell className="celulaDoCorpo hidden md:table-cell">
                           {produto.atualizadoEm}
                         </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {produto.tenantId}
-                        </TableCell>
-                        <TableCell>
+                        <TableCell className="celulaDoCorpo">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
@@ -121,7 +122,8 @@ export default async function ProdutosPage() {
             </CardContent>
             <CardFooter>
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-10</strong> of <strong>32</strong> products
+                Showing <strong>1-10</strong> of{" "}
+                <strong>{resultado.quantidadeDeRegistros}</strong> products
               </div>
             </CardFooter>
           </Card>

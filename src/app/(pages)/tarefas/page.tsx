@@ -1,8 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import { MoreHorizontal } from "lucide-react";
-import useSWR from "swr";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,32 +26,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
-import fetcher from "@/lib/utils";
-import { useSession } from "next-auth/react";
+import { obterTarefas } from "@/api/tetricks/tarefas";
 
-export default function TarefasPage() {
-  const [pageIndex, setPageIndex] = useState(0);
-
-  const session = useSession() as any;
-  const myHeaders = new Headers([
-    ["Autorization", `Bearer ${session.accessToken}`],
-  ]);
-
-  const configInit: RequestInit = {
-    method: "GET",
-    headers: myHeaders,
-    cache: "default",
-  };
-  const { data, error, isLoading } = useSWR<any>(
-    [process.env.TETRICKS_API_BASE_URL + "/Tarefas", configInit],
-    fetcher
-  );
-
-  if (error) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
-
-  const produtos = data.resultados as any[];
+export default async function TarefasPage() {
+  const resultado = await obterTarefas();
+  const tarefas = resultado.resultados as any[];
 
   return (
     <div className="flex w-full flex-col">
@@ -93,7 +69,7 @@ export default function TarefasPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {produtos.slice(0, 5).map((produto, i) => {
+                  {tarefas.slice(0, 5).map((produto, i) => {
                     return (
                       <TableRow key={produto.id}>
                         <TableCell className="hidden sm:table-cell">
@@ -101,7 +77,7 @@ export default function TarefasPage() {
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
-                            src="https://dummyimage.com/30x30"
+                            src="https://dummyimage.com/15x15"
                             width="64"
                           />
                         </TableCell>
@@ -150,7 +126,7 @@ export default function TarefasPage() {
             <CardFooter>
               <div className="text-xs text-muted-foreground">
                 Showing <strong>1-10</strong> of{" "}
-                <strong>{produtos.length}</strong> products
+                <strong>{tarefas.length}</strong> products
               </div>
             </CardFooter>
           </Card>
